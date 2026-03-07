@@ -29,14 +29,16 @@ Each entry may be one of the following:
 ---
 
 ### Entry 1
-**Date:** YYYY-MM-DD  
-**Entry Type:** Bug Fix / Edge Case / Engineering Decision  
-**Task worked on:**  
-**Issue or decision:**  
+**Date:** 2026-3-6
+**Entry Type:**  Engineering Decision  
+**Task worked on:** CORE A 
+**Issue or decision:**  I made the decision to test CORE A addSpace after finishing it to avoid
+problems moving forward.
 **Error message / symptom (if applicable):**  
-**What I tried:**  
+**What I tried:**  I ran the code and fixed brace structure.
 **Fix / resolution (or final decision):**  
-**Commit(s):**
+**Commit(s):** Core A completion and Test run
+
 
 ---
 
