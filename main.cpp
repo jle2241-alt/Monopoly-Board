@@ -103,19 +103,19 @@ public:
         if (nodeCount == MAX_SPACES) {
             return false;
         }
-            Node<T>* newNode = new Node<T>(value);
+        Node<T>* newNode = new Node<T>(value);
 
-    if (headNode == nullptr) {
-        headNode =newNode;
-        tailNode = newNode;
-        playerNode = newNode;
-        newNode->nextNode = headNode;
-    }
-    else {
-        tailNode->nextNode = newNode;
-        tailNode = newNode;
-        newNode->nextNode = headNode;
-    }
+        if (headNode == nullptr) {
+            headNode =newNode;
+            tailNode = newNode;
+            playerNode = newNode;
+            newNode->nextNode = headNode;
+        }
+        else {
+            tailNode->nextNode = newNode;
+            tailNode = newNode;
+            newNode->nextNode = headNode;
+        }
         nodeCount++;
         return true;
 
@@ -133,27 +133,40 @@ public:
     // Core B: Add Multiple Spaces at Once
     // -------------------------------
     int addMany(vector<T> values) {
-       int added = 0;
-        // TODO:
-        // - Add sequentially until full
-        // - Stop exactly when you reach MAX_SPACES
-        // - Return number successfully added
-        // - Do not corrupt pointers if capacity is exceeded
-
+        int added = 0;
+        for (int i = 0; i< values.size(); i++) {
+            if (addSpace(values[i])) {
+                added++;
+            } else {
+                break;
+            }
+        }
+        return added;
     }
 
-    // -------------------------------
-    // Core C: Traversal-Based Player Movement
-    // -------------------------------
-    void movePlayer(int steps) {
-        // TODO:
-        // - Move playerNode forward 'steps' times, node-by-node
-        // - Wrap naturally because list is circular
-        // - Detect and track passing GO:
-        //   increment passGoCount when a move crosses from tail back to head
-        // - Must handle empty list safely
-        cout << "movePlayer unwritten" << endl;
-    }
+        // -------------------------------
+        // Core C: Traversal-Based Player Movement
+        // -------------------------------
+        void movePlayer(int steps) {
+
+        if (playerNode == nullptr) {
+            return;
+        }
+
+            for (int i = 0; i< steps; i++) {
+              if (playerNode == tailNode) { //compares player position to tailNode to see if it is on TailN
+                  passGoCount++;
+              }
+                  playerNode = playerNode->nextNode;
+            }
+            // TODO:
+            // - Move playerNode forward 'steps' times, node-by-node
+            // - Wrap naturally because list is circular
+            // - Detect and track passing GO:
+            //   increment passGoCount when a move crosses from tail back to head
+            // - Must handle empty list safely
+            cout << "movePlayer unwritten" << endl;
+        }
 
     int getPassGoCount() {
         return passGoCount;
