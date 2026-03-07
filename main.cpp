@@ -19,7 +19,7 @@ public:
     int rent;
 
     MonopolySpace() {
-        // TODO: define default constructor (recommended)
+        // DEFAULT CONSTRUCTOR
         propertyName = "";
         propertyColor = "";
         value = 0;
@@ -27,18 +27,20 @@ public:
     }
 
     MonopolySpace(string propertyName, string propertyColor, int value, int rent) {
-        /* TODO: Define overloaded constructor here */
+        // OVERLOAD CONSTRUCTOR
+        this->propertyName =propertyName;
+        this->propertyColor = propertyColor;
+        this->rent = rent;
+        this->value = value;
     }
 
     bool isEqual(MonopolySpace other) {
-        /* TODO: Define isEqual here (compare by name is fine if you enforce uniqueness) */
-        return false;
+        return propertyName == other.propertyName;
     }
 
     void print() {
-        /* TODO: Define print here */
-        // Example style:
-        // cout << propertyName << " | " << propertyColor << " | $" << value << " | Rent " << rent;
+        cout << propertyName << " | " << propertyColor << " | $" << value << " | Rent " << rent;
+
     }
 };
 
@@ -98,6 +100,25 @@ public:
     // Core A: Add a Space with Capacity Enforcement
     // -------------------------------
     bool addSpace(T value) {
+        if (nodeCount == MAX_SPACES) {
+            return false;
+        }
+            Node<T>* newNode = new Node<T>(value);
+
+    if (headNode == nullptr) {
+        headNode =newNode;
+        tailNode = newNode;
+        playerNode = newNode;
+        newNode->nextNode = headNode;
+    }
+    else {
+        tailNode->nextNode = newNode;
+        tailNode = newNode;
+        newNode->nextNode = headNode;
+    }
+        nodeCount++;
+        return true;
+
         // TODO:
         // - If nodeCount == MAX_SPACES return false (do not corrupt list)
         // - Create new node
@@ -112,13 +133,13 @@ public:
     // Core B: Add Multiple Spaces at Once
     // -------------------------------
     int addMany(vector<T> values) {
+       int added = 0;
         // TODO:
         // - Add sequentially until full
         // - Stop exactly when you reach MAX_SPACES
         // - Return number successfully added
         // - Do not corrupt pointers if capacity is exceeded
-        cout << "addMany unwritten" << endl;
-        return 0;
+
     }
 
     // -------------------------------
