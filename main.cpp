@@ -148,25 +148,19 @@ public:
         // Core C: Traversal-Based Player Movement
         // -------------------------------
         void movePlayer(int steps) {
-
         if (playerNode == nullptr) {
             return;
         }
 
-            for (int i = 0; i< steps; i++) {
-              if (playerNode == tailNode) { //compares player position to tailNode to see if it is on TailN
-                  passGoCount++;
-              }
-                  playerNode = playerNode->nextNode;
+        for (int i = 0; i< steps; i++) {
+            if (playerNode == tailNode) { //compares player position to tailNode to see if it is on TailN
+                passGoCount++;
             }
-            // TODO:
-            // - Move playerNode forward 'steps' times, node-by-node
-            // - Wrap naturally because list is circular
-            // - Detect and track passing GO:
-            //   increment passGoCount when a move crosses from tail back to head
-            // - Must handle empty list safely
-            cout << "movePlayer unwritten" << endl;
+            playerNode = playerNode->nextNode;
         }
+
+        cout << endl;
+    }
 
     int getPassGoCount() {
         return passGoCount;
@@ -176,12 +170,17 @@ public:
     // Core D: Controlled Board Display
     // -------------------------------
     void printFromPlayer(int count) {
-        // TODO:
-        // - Print exactly 'count' nodes starting from playerNode
-        // - Must not infinite loop
-        // - Must handle empty list
-        // - Output must be deterministic and readable
-        cout << "printFromPlayer unwritten" << endl;
+     if (playerNode == nullptr) {
+         return;
+     }
+        Node<T>* currentNode = playerNode;
+
+        for (int i = 0; i< count; i++) {
+            currentNode->data.print();
+            cout << endl;
+            currentNode = currentNode->nextNode;    //move
+        }
+
     }
 
     // Optional helper: print full board once (one full cycle)
