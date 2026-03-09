@@ -119,14 +119,7 @@ public:
         nodeCount++;
         return true;
 
-        // TODO:
-        // - If nodeCount == MAX_SPACES return false (do not corrupt list)
-        // - Create new node
-        // - If empty list: head=tail=player=new, new->next=head
-        // - Else: tail->next=new, tail=new, tail->next=head
-        // - nodeCount++
-        cout << "addSpace unwritten" << endl;
-        return false;
+
     }
 
     // -------------------------------
@@ -159,20 +152,22 @@ public:
             playerNode = playerNode->nextNode;
         }
 
-        cout << endl;
+
     }
 
     int getPassGoCount() {
         return passGoCount;
     }
 
-    // -------------------------------
+    // -------------------Adv------------
     // Core D: Controlled Board Display
     // -------------------------------
     void printFromPlayer(int count) {
+
      if (playerNode == nullptr) {
          return;
      }
+
         Node<T>* currentNode = playerNode;
 
         for (int i = 0; i< count; i++) {
@@ -182,29 +177,69 @@ public:
         }
 
     }
+    void printCurrentSpace() {
+        if (playerNode == nullptr) return;
+        playerNode->data.print();
+        cout << endl;
+    }
 
     // Optional helper: print full board once (one full cycle)
     void printBoardOnce() {
-        // TODO:
-        // - Traverse exactly one full cycle and print each node
-        cout << "printBoardOnce unwritten" << endl;
+
     }
 
     // -------------------------------
     // Advanced Option A (Level 1): removeByName
     // -------------------------------
     bool removeByName(string name) {
-        // TODO:
-        // - Delete FIRST matching node
-        // - Must handle:
-        //   - deleting head
-        //   - deleting tail
-        //   - deleting the only-node list
-        // - Maintain circular link tail->next=head
-        // - If playerNode points to deleted node, move playerNode to a safe node
-        // - nodeCount--
-        cout << "removeByName unwritten" << endl;
+        if (headNode == nullptr) return false;
+
+        Node<T>* currentNode = headNode;
+        Node<T>* previous = tailNode;
+
+        do {
+            if (currentNode->data.propertyName == name) {
+
+                // case where one node is in list
+                if (headNode == tailNode) {
+                    delete currentNode;
+                    headNode = nullptr;
+                    tailNode = nullptr;
+                    playerNode = nullptr;
+                    nodeCount = 0;
+                    return true;
+                }
+
+                //case 2 leaving the head/deleting
+                if (currentNode == headNode) {
+                    headNode = headNode->nextNode;
+                    tailNode->nextNode = headNode;
+                }
+                // case 3 deleting the tail
+                else if (currentNode == tailNode) {
+                    tailNode = previous;
+                    tailNode->nextNode = headNode;
+                }
+                //CCase 4 The MIDDLE NODE
+                else {
+                    previous->nextNode = currentNode->nextNode;
+                }
+                // If player was on deleted node, move safely
+                if (playerNode == currentNode) {
+                    playerNode = currentNode->nextNode;
+                }
+
+                delete currentNode;
+                nodeCount--;
+                return true;
+            }
+
+            previous = currentNode;
+            currentNode = currentNode->nextNode;
+        } while (currentNode != headNode);
+
         return false;
+
     }
 
     // -------------------------------
@@ -233,38 +268,47 @@ public:
 
 
     // -------------------------------
-    // Advanced Option B (Level 2): Mirror the Board (Circular Reversal)
-    // -------------------------------
-    void mirrorBoard() {
-        // TODO:
-        // - Reverse the direction of the circular list by reversing next pointers
-        // - Preserve circular structure
-        // - Correctly handle empty list and single-node list
-        // - Player cursor must remain on the same logical space after reversal
-        cout << "mirrorBoard unwritten" << endl;
-    }
-
-    // -------------------------------
     // Edge-case helper: countSpaces O(n)
     // -------------------------------
     int countSpaces() {
-        // TODO:
-        // - Must be O(n), traverse exactly once with correct stop condition
-        // - Do NOT rely on nodeCount for this method
-        cout << "countSpaces unwritten" << endl;
-        return 0;
+        if (headNode == nullptr) {
+            return 0;
+        }
+
+        Node<T>* currentNode = headNode;
+        int count = 0;
+
+        do {
+            count++;
+            currentNode = currentNode->nextNode;
+        } while (currentNode != headNode);
+    return count;
     }
 
     // -------------------------------
     // Cleanup
     // -------------------------------
     void clear() {
-        // TODO:
-        // - Safely delete all nodes
-        // - Tip: if tailNode exists, break the cycle first: tailNode->nextNode = nullptr
-        // - Then delete like a normal singly linked list
-        cout << "clear unwritten" << endl;
+
+      if (headNode == nullptr) {
+          return;
+      }
+
+        tailNode->nextNode = nullptr;
+
+        Node<T>* currentNode = headNode;
+        while (currentNode !=nullptr) {
+            Node<T>* nextNode = currentNode->nextNode;
+            delete currentNode;
+            currentNode = nextNode;
+        }
+    headNode = nullptr;
+        tailNode = nullptr;
+        playerNode = nullptr;
+        nodeCount = 0;
+        passGoCount = 0;
     }
+
 };
 
 // -------------------------------
@@ -345,7 +389,9 @@ int main() {
     spaces.push_back(MonopolySpace("Evergreen Plaza", "Jade", 275, 27));
     spaces.push_back(MonopolySpace("High Fashion Hub", "Luxury", 285, 28));
     int added = board.addMany(spaces);
-    cout<< "Added spaces:"<< added << endl;
+    cout << "Added spaces: " << added << endl;
+
+
     // -------------------------------
     // Playable Traversal Loop
     // -------------------------------
@@ -355,20 +401,18 @@ int main() {
 
         board.movePlayer(roll);
 
+        cout << "Landed on: ";
+        board.printCurrentSpace();
+
         cout << "Board view from player (next 5 spaces):" << endl;
         board.printFromPlayer(5);
 
         cout << "Times passed GO so far: " << board.getPassGoCount() << endl;
 
-        int added = board.addMany(spaces);
-        cout << "Added spaces: " << added << endl;
 
-        vector<string> blacks = board.findByColor("Black");
-        cout << "\nfindByColor(\"Black\") returned " << blacks.size() << " matches:\n";
-        for (string name : blacks) {
-            cout << name << endl;
-        }
-        cout << endl;
+
+        // remove a middle node
+
         // -------------------------------
         // Advanced Feature Demos (students choose path)
         // -------------------------------
